@@ -1,5 +1,7 @@
 package ru.practicum.shareit.user;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public class UserMapper  {
     public static UserDto toDto(User user) {
         return new UserDto(
