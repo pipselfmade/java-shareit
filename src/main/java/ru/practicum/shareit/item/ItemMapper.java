@@ -2,8 +2,8 @@ package ru.practicum.shareit.item;
 
 import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.request.ItemRequest;
-
 import java.util.HashMap;
+
 @UtilityClass
 public class ItemMapper {
     private static final HashMap<Long, ItemRequest> requests = new HashMap<>();
