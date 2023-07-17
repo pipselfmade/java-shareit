@@ -11,7 +11,7 @@ public interface BookingService {
 
     BookingDto approveBooking(Long id, Long bookingId, Boolean approved);
 
-    BookingDto getBookingById(@RequestHeader("X-Sharer-User-Id") Long id, @PathVariable Long bookingId);
+    BookingDto getBookingById(Long id, Long bookingId);
 
     List<BookingDto> getAllBookingByState(Long id, String state);
 

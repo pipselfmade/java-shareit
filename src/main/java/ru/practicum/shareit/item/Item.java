@@ -9,6 +9,9 @@ import ru.practicum.shareit.user.User;
 
 import javax.persistence.*;
 
+import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.FetchType.LAZY;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -29,11 +32,11 @@ public class Item {
     @Column(name = "is_available")
     private Boolean available;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = EAGER)
     @JoinColumn(name = "ownerId")
     private User owner;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "request_id")
     private ItemRequest request;
 }

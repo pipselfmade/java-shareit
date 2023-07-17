@@ -2,6 +2,8 @@ package ru.practicum.shareit.booking;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import lombok.extern.slf4j.Slf4j;
+
 
 import javax.validation.Valid;
 import javax.xml.bind.ValidationException;
@@ -9,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/bookings")
+@Slf4j
 @RequiredArgsConstructor
 public class BookingController {
     private final BookingService bookingService;
@@ -16,6 +19,7 @@ public class BookingController {
     @PostMapping()
     public BookingDto addBooking(@RequestHeader("X-Sharer-User-Id") Long id,
                                  @Valid @RequestBody BookingEntryDto bookingDto) throws ValidationException {
+        log.info("Добавлен новый запрос: {}", bookingDto);
         return bookingService.addBooking(id, bookingDto);
     }
 
@@ -23,6 +27,7 @@ public class BookingController {
     public BookingDto approveBooking(@RequestHeader("X-Sharer-User-Id") Long id,
                                      @PathVariable Long bookingId,
                                      @RequestParam Boolean approved) {
+        log.info("Отправлен запрос на изменение статуса бронирования от владельца c id: {}", id);
         return bookingService.approveBooking(id, bookingId, approved);
     }
 
