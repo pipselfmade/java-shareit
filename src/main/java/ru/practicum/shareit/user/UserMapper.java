@@ -1,21 +1,22 @@
 package ru.practicum.shareit.user;
+
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class UserMapper  {
-    public static UserDto toDto(User user) {
-        return new UserDto(
-                user.getId(),
-                user.getName(),
-                user.getEmail()
-        );
+public class UserMapper {
+    public static UserDto toUserDto(User user) {
+        return UserDto.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .name(user.getName())
+                .build();
     }
 
-    public static User toObject(UserDto userDto) {
-        return new User(
-                userDto.getId(),
-                userDto.getName(),
-                userDto.getEmail()
-        );
+    public static User toUser(UserDto userDto) {
+        return User.builder()
+                .id(userDto.getId())
+                .email(userDto.getEmail())
+                .name(userDto.getName())
+                .build();
     }
 }

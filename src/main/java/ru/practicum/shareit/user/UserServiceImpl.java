@@ -3,90 +3,57 @@ package ru.practicum.shareit.user;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.exception.DuplicateException;
-import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.exceptions.NotFoundException;
+import ru.practicum.shareit.item.ItemRepository;
 
-import java.util.ArrayList;
+import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
-@Service
+import static ru.practicum.shareit.user.UserMapper.toUser;
+import static ru.practicum.shareit.user.UserMapper.toUserDto;
+
 @Slf4j
+@Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    private final UserRepository repository;
+    private final UserRepository userRepository;
+    private final ItemRepository itemRepository;
 
     @Override
-    public UserDto createUser(UserDto userDto) {
-        User user = UserMapper.toObject(userDto);
-
-        if (repository.checkDuplicateEmail(user.getEmail())) {
-            log.info("User with email " + userDto.getEmail() + " already exists");
-            throw new DuplicateException("User with email " + userDto.getEmail() + " already exists");
-        }
-
-        log.info("User " + user.getName() + " created successfully");
-        return UserMapper.toDto(repository.createUser(user));
+    public List<User> getUsers() {
+        return List.copyOf(userRepository.findAll());
     }
 
     @Override
-    public UserDto getUser(Long id) {
-        Optional<User> optionalUser = repository.getUser(id);
+    public UserDto getUserById(Long userId) {
+        return toUserDto(userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found")));
+    }
 
-        if (optionalUser.isEmpty()) {
-            log.info("User with id " + id + " not found for getting");
-            throw new NotFoundException("User with id " + id + " not found for getting");
-        }
-
-        log.info("User with id " + id + " returned successfully");
-        return UserMapper.toDto(optionalUser.get());
+    @Transactional
+    @Override
+    public UserDto addUser(UserDto user) {
+        return toUserDto(userRepository.save(toUser(user)));
     }
 
     @Override
-    public List<UserDto> getAllUsers() {
-        List<UserDto> usersDto = new ArrayList<>();
-
-        for (User user : repository.getAllUsers()) {
-            usersDto.add(UserMapper.toDto(user));
+    public UserDto updateUser(Long userId, UserDto user) {
+        User updUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
+        if (user.getName() != null) {
+            updUser.setName(user.getName());
         }
-
-        log.info("All users returned successfully");
-        return usersDto;
+        if (user.getEmail() != null) {
+            updUser.setEmail(user.getEmail());
+        }
+        return toUserDto(userRepository.save(updUser));
     }
 
+    @Transactional
     @Override
-    public UserDto updateUser(UserDto userDto, Long id) {
-        User userForUpdate = UserMapper.toObject(getUser(id));
-
-        if (userDto.getName() != null) {
-            userForUpdate.setName(userDto.getName());
+    public Boolean deleteUser(Long userId) {
+        if (userRepository.existsById(userId)) {
+            itemRepository.deleteAll(itemRepository.findAllByOwnerId(userId));
+            userRepository.deleteById(userId);
         }
-
-        if (userDto.getEmail() != null) {
-            if (repository.checkDuplicateEmail(userDto.getEmail())) {
-                if (!userDto.getEmail().equals(userForUpdate.getEmail())) {
-                    log.info("User with email " + userDto.getEmail() + " already exists");
-                    throw new DuplicateException("User with email " + userDto.getEmail() + " already exists");
-                }
-            }
-
-            userForUpdate.setEmail(userDto.getEmail());
-        }
-
-        log.info("User " + userForUpdate.getName() + " updated successfully");
-        return UserMapper.toDto(repository.updateUser(userForUpdate, id));
-    }
-
-    @Override
-    public UserDto deleteUser(Long id) {
-        Optional<User> optionalUser = repository.deleteUser(id);
-
-        if (optionalUser.isEmpty()) {
-            log.info("User with id " + id + " not found for deleting");
-            throw new NotFoundException("User with id " + id + " not found for deleting");
-        }
-
-        log.info("User with id " + id + " deleted successfully");
-        return UserMapper.toDto(optionalUser.get());
+        return !userRepository.existsById(userId);
     }
 }

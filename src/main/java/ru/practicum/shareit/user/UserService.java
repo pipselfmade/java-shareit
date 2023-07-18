@@ -1,15 +1,17 @@
 package ru.practicum.shareit.user;
 
+import ru.practicum.shareit.exceptions.DuplicateException;
+
 import java.util.List;
 
 public interface UserService {
-    UserDto createUser(UserDto userDto);
+    List<User> getUsers();
 
-    UserDto getUser(Long id);
+    UserDto getUserById(Long userId);
 
-    List<UserDto> getAllUsers();
+    UserDto addUser(UserDto user) throws DuplicateException;
 
-    UserDto updateUser(UserDto userDto, Long id);
+    UserDto updateUser(Long userId, UserDto user) throws DuplicateException;
 
-    UserDto deleteUser(Long id);
+    Boolean deleteUser(Long userId);
 }
