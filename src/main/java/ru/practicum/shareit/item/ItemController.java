@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.comment.CommentDto;
 
 import javax.validation.Valid;
+import javax.xml.bind.ValidationException;
 import java.util.List;
 
 @RestController
@@ -28,8 +29,10 @@ public class ItemController {
     }
 
     @GetMapping("/search")
-    public List<ItemDto> searchItems(@RequestParam @DefaultValue(value = " ") String text) {
-        return itemService.searchItems(text);
+    public List<ItemDto> searchItems(@RequestParam @DefaultValue(value = " ") String text,
+                                     @RequestParam(defaultValue = "0") int from,
+                                     @RequestParam(defaultValue = "10") int size) throws ValidationException {
+        return itemService.searchItems(text, from, size);
     }
 
     @PatchMapping("/{itemId}")
