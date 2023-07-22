@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ru.practicum.shareit.exceptions.ErrorResponse handleNotFoundException(final ru.practicum.shareit.exceptions.NotFoundException e) {
+    public ru.practicum.shareit.exceptions.ErrorResponse handleNotFoundException(final ru.practicum.shareit.exception.NotFoundException e) {
         return new ru.practicum.shareit.exceptions.ErrorResponse("Not found error", e.getMessage());
     }
 
@@ -22,7 +22,7 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ru.practicum.shareit.exceptions.ErrorResponse notAvailableException(final ru.practicum.shareit.exceptions.NotAvailableException e) {
+    public ru.practicum.shareit.exceptions.ErrorResponse notAvailableException(final ru.practicum.shareit.exception.NotAvailableException e) {
         return new ru.practicum.shareit.exceptions.ErrorResponse("Available error", e.getMessage());
     }
 
@@ -40,7 +40,7 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ru.practicum.shareit.exceptions.ErrorResponse handleWrongState(final ru.practicum.shareit.exceptions.NotSupportedStateException e) {
+    public ru.practicum.shareit.exceptions.ErrorResponse handleWrongState(final ru.practicum.shareit.exception.NotSupportedStateException e) {
         return new ru.practicum.shareit.exceptions.ErrorResponse(e.getMessage(), e.getMessage());
     }
 }
