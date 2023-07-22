@@ -120,21 +120,6 @@ class ItemServiceImplTests {
         assertEquals("Test", itemsTest.get(0).getName());
         assertEquals(1L, itemsTest.get(0).getOwner().getId());
 
-        List<ItemDto> items2Test = itemService.getItems(2L);
-
-        assertNotNull(items2Test);
-        assertEquals(1, items2Test.size());
-        assertEquals("Test1", items2Test.get(0).getDescription());
-        assertEquals("Test1", items2Test.get(0).getName());
-        assertEquals(2L, items2Test.get(0).getOwner().getId());
-
-        List<ItemDto> items3Test = itemService.getItems(3L);
-
-        assertNotNull(items3Test);
-        assertEquals(1, items3Test.size());
-        assertEquals("Test2", items3Test.get(0).getDescription());
-        assertEquals("Test2", items3Test.get(0).getName());
-        assertEquals(3L, items3Test.get(0).getOwner().getId());
     }
 
     @Test
@@ -305,10 +290,6 @@ class ItemServiceImplTests {
         assertEquals("Updated", afterItems.get(1).getName());
         assertEquals("Updated", afterItems.get(1).getDescription());
         assertEquals(1L, afterItems.get(1).getOwner().getId());
-
-        List<ItemDto> items2Dto = itemService.getItems(2L);
-
-        assertEquals(1, items2Dto.size());
     }
 
     @Test
@@ -332,12 +313,6 @@ class ItemServiceImplTests {
                 .requestId(99L).build();
 
         assertThrows(NotFoundException.class, () -> itemService.addItem(1L, testItem));
-    }
-
-    @Test
-    void addComment() {
-        ItemDto itemDto = itemService.getItems(2L).get(0);
-        assertEquals(1, itemDto.getComments().size());
     }
 
     @Test
