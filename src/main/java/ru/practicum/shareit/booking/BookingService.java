@@ -1,8 +1,5 @@
 package ru.practicum.shareit.booking;
 
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
-
 import javax.xml.bind.ValidationException;
 import java.util.List;
 
