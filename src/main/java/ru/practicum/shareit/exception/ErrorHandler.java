@@ -1,6 +1,6 @@
 package ru.practicum.shareit.exception;
 
-import ru.practicum.shareit.exceptions.ErrorResponse;
+import ru.practicum.shareit.exception.ErrorResponse;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.NotAvailableException;
 
@@ -21,7 +21,7 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse validationException(final MethodArgumentNotValidException e) {
-        return new ru.practicum.shareit.exceptions.ErrorResponse("Validation error", e.getMessage());
+        return new ru.practicum.shareit.exception.ErrorResponse("Validation error", e.getMessage());
     }
 
     @ExceptionHandler
